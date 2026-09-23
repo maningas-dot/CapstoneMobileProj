@@ -1,24 +1,23 @@
 <?php
 
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$db = getenv('DB_NAME') ?: 'gonzales_vision_clinic';
+$host = getenv('MYSQLHOST') ?: getenv('DB_HOST') ?: 'iriguchi.proxy.rlwy.net';
+$db = getenv('MYSQL_DATABASE') ?: getenv('DB_NAME') ?: 'railway';
+$user = getenv('MYSQLUSER') ?: getenv('DB_USER') ?: 'root';
+$pass = getenv('MYSQLPASSWORD') ?: getenv('DB_PASSWORD') ?: getenv('DB_PASS') ?: 'JPKfxDmFHQaVNkMtBySKwpskXNpyeFBx';
+$port = (int) (getenv('MYSQLPORT') ?: getenv('DB_PORT') ?: 21536);
 
-$credentialCandidates = [
-    [
-        'user' => getenv('DB_USER') ?: 'root',
-        'pass' => getenv('DB_PASSWORD') ?: '',
-    ],
-];
+$conn = @new mysqli($host, $user, $pass, $db, $port);
 
-$conn = null;
-foreach ($credentialCandidates as $credentials) {
-    $user = $credentials['user'];
-    $pass = $credentials['pass'];
-    $conn = @new mysqli($host, $user, $pass, $db);
-    if (!$conn->connect_error) {
-        break;
-    }
+if ($conn->connect_error) {
     $conn = null;
+}
+
+if ($conn === null || $conn->connect_error) {
+    http_response_code(500);
+    die(json_encode([
+        'success' => false,
+        'message' => 'Database connection failed. Check XAMPP MySQL is running and the credentials match.'
+    ]));
 }
 
 if ($conn === null || $conn->connect_error) {

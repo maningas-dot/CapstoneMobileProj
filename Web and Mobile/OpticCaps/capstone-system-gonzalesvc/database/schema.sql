@@ -1,7 +1,9 @@
 -- This is a separate database script, NOT part of your React code!
 
-CREATE DATABASE gonzales_vision_clinic;
-USE gonzales_vision_clinic;
+-- CREATE DATABASE gonzales_vision_clinic;
+-- USE gonzales_vision_clinic;
+
+SET FOREIGN_KEY_CHECKS = 0;
 
 CREATE TABLE patients (
     patient_id VARCHAR(10) PRIMARY KEY,
@@ -129,3 +131,5 @@ CREATE TABLE frames (
     conversion_status ENUM('Not Converted', 'Processing', 'Converted', 'Failed') DEFAULT 'Not Converted',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
+
+SET FOREIGN_KEY_CHECKS = 1;
